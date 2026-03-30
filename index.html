@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>Soclean | Профессиональная химчистка Ташкент</title>
+    
+    <meta name="description" content="Soclean - химчистка мебели №1 в Ташкенте. Профессиональное оборудование и эко-средства.">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brandBlue: '#1d4ed8', // Насыщенный синий
+                        brandYellow: '#facc15', // Яркий желтый
+                        darkBg: '#0f172a',
+                        darkCard: '#1e293b'
+                    },
+                    boxShadow: {
+                        'yellow': '0 10px 15px -3px rgba(250, 204, 21, 0.4)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Улучшение для iPhone: убираем лишние отступы и фиксим горизонтальный скролл */
+        body { overflow-x: hidden; width: 100%; -webkit-font-smoothing: antialiased; }
+        
+        .glass { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+        .dark .glass { background: rgba(15, 23, 42, 0.9); }
+        
+        /* Желтый скроллбар */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: #facc15; border-radius: 10px; }
+
+        /* Пульсация желтой кнопки */
+        .pulse-yellow { animation: pulse-y 2s infinite; }
+        @keyframes pulse-y {
+            0% { box-shadow: 0 0 0 0 rgba(250, 204, 21, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(250, 204, 21, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(250, 204, 21, 0); }
+        }
+
+        /* Анимация мобильного меню */
+        #mobile-menu { transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1); }
+        .menu-open #mobile-menu { transform: translateX(0); }
+        .menu-open #menu-overlay { opacity: 1; pointer-events: auto; }
+
+        /* Слайдер */
+        .slide-track { display: flex; transition: transform 0.5s ease-in-out; }
+
+        /* Фикс для iPhone Pro Max (избегаем наслоения текста) */
+        @media (max-width: 430px) {
+            h1 { font-size: 2.75rem !important; line-height: 1.1 !important; }
+            .hero-btns { flex-direction: column; }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-darkBg dark:text-white">
+
+    <div id="menu-overlay" class="fixed inset-0 bg-black/60 z-[90] opacity-0 pointer-events-none transition-opacity duration-300 backdrop-blur-sm"></div>
+
+    <header id="header" class="fixed w-full z-[100] transition-all duration-500 py-4 px-4 md:px-8">
+        <div class="max-w-7xl mx-auto flex justify-between items-center glass border-2 border-brandYellow/30 rounded-full px-5 py-2 shadow-xl">
+            
+            <a href="#" class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-brandBlue rounded-full flex items-center justify-center border-2 border-brandYellow overflow-hidden shadow-yellow">
+                    <img src="https://via.placeholder.com/100" alt="Logo" class="w-full h-full object-cover">
+                </div>
+                <span class="text-xl md:text-2xl font-black tracking-tighter text-brandBlue dark:text-white italic">SOCLEAN</span>
+            </a>
+
+            <nav class="hidden lg:flex items-center space-x-8 text-[13px] font-bold uppercase tracking-widest">
+                <a href="#about" data-i18n="nav_about" class="hover:text-brandBlue dark:hover:text-brandYellow transition">О нас</a>
+                <a href="#services" data-i18n="nav_services" class="hover:text-brandBlue dark:hover:text-brandYellow transition">Услуги</a>
+                <a href="#steps" data-i18n="nav_steps" class="hover:text-brandBlue dark:hover:text-brandYellow transition">Процесс</a>
+                <a href="#faq" data-i18n="nav_faq" class="hover:text-brandBlue dark:hover:text-brandYellow transition">Вопросы</a>
+            </nav>
+
+            <div class="flex items-center space-x-2 md:space-x-4">
+                <div class="hidden sm:flex bg-slate-200 dark:bg-slate-800 rounded-full p-1 border border-brandYellow/20">
+                    <button onclick="changeLang('ru')" id="lang-ru" class="px-3 py-1 rounded-full text-xs font-black transition-all duration-300">RU</button>
+                    <button onclick="changeLang('uz')" id="lang-uz" class="px-3 py-1 rounded-full text-xs font-black transition-all duration-300">UZ</button>
+                </div>
+
+                <button id="dark-mode-toggle" class="w-10 h-10 rounded-full bg-brandYellow/10 flex items-center justify-center text-brandYellow hover:bg-brandYellow hover:text-white transition shadow-sm">
+                    <i class="fas fa-moon dark:hidden"></i>
+                    <i class="fas fa-sun hidden dark:block"></i>
+                </button>
+
+                <a href="tel:+998901234567" class="hidden md:flex bg-brandBlue text-white border-2 border-brandYellow px-6 py-2 rounded-full font-bold text-sm shadow-yellow hover:scale-105 transition">
+                    <span data-i18n="btn_order">Заказать</span>
+                </a>
+
+                <button id="burger-btn" class="lg:hidden w-10 h-10 flex items-center justify-center text-brandBlue dark:text-white">
+                    <div class="space-y-1.5">
+                        <span class="block w-6 h-0.5 bg-current rounded transition-transform" id="b-line1"></span>
+                        <span class="block w-6 h-0.5 bg-brandYellow rounded transition-opacity" id="b-line2"></span>
+                        <span class="block w-4 h-0.5 bg-current rounded transition-transform ml-auto" id="b-line3"></span>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div id="mobile-menu" class="fixed top-0 right-0 h-full w-[85%] md:w-[60%] bg-white dark:bg-darkBg z-[110] translate-x-full shadow-2xl p-8 flex flex-col border-l-4 border-brandYellow">
+        <div class="flex justify-between items-center mb-12">
+            <span class="text-2xl font-black text-brandBlue italic">SOCLEAN</span>
+            <button id="close-menu" class="text-3xl text-slate-400">&times;</button>
+        </div>
+
+        <nav class="flex flex-col space-y-6 mb-auto">
+            <a href="#about" class="text-3xl font-black mobile-link" data-i18n="nav_about">О нас</a>
+            <a href="#services" class="text-3xl font-black mobile-link" data-i18n="nav_services">Услуги</a>
+            <a href="#steps" class="text-3xl font-black mobile-link" data-i18n="nav_steps">Процесс</a>
+            <a href="#faq" class="text-3xl font-black mobile-link" data-i18n="nav_faq">FAQ</a>
+        </nav>
+
+        <div class="mt-8 pt-8 border-t border-slate-100 dark:border-slate-800">
+            <div class="flex items-center space-x-4 mb-8">
+                <button onclick="changeLang('ru')" class="text-xl font-black lang-m-btn">RU</button>
+                <div class="w-1 h-6 bg-brandYellow rounded-full"></div>
+                <button onclick="changeLang('uz')" class="text-xl font-black lang-m-btn">UZ</button>
+            </div>
+            <a href="tel:+998901234567" class="block w-full bg-brandBlue text-white text-center py-5 rounded-2xl font-black text-xl border-2 border-brandYellow shadow-yellow mb-4">
+                <i class="fas fa-phone-alt mr-2"></i> +998 90 123 45 67
+            </a>
+            <div class="flex justify-center space-x-6">
+                <a href="#" class="text-2xl text-pink-600"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="text-2xl text-sky-500"><i class="fab fa-telegram"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <section class="relative min-h-screen flex items-center pt-24 px-6 overflow-hidden">
+        <div class="absolute -top-24 -right-24 w-96 h-96 bg-brandYellow/20 rounded-full blur-[120px]"></div>
+        <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-brandBlue/10 rounded-full blur-[120px]"></div>
+
+        <div class="max-w-7xl mx-auto w-full grid lg:grid-cols-2 gap-12 items-center relative z-10">
+            <div data-aos="fade-right">
+                <div class="inline-flex items-center space-x-3 bg-brandBlue text-white px-4 py-2 rounded-full mb-6 border-b-4 border-brandYellow shadow-lg">
+                    <span class="w-2 h-2 bg-brandYellow rounded-full animate-ping"></span>
+                    <span class="text-xs font-black tracking-widest uppercase" data-i18n="hero_badge">Мы работаем в Ташкенте</span>
+                </div>
+                <h1 class="text-5xl md:text-8xl font-black leading-[1.05] mb-8 italic">
+                    <span data-i18n="hero_t1">ЧИСТОТА</span> <br>
+                    <span class="text-brandBlue dark:text-brandYellow" data-i18n="hero_t2">БЕЗ ПЯТЕН</span>
+                </h1>
+                <p class="text-lg md:text-xl opacity-80 mb-10 max-w-lg leading-relaxed border-l-4 border-brandYellow pl-6" data-i18n="hero_desc">
+                    Профессиональная глубокая химчистка мебели, матрасов и авто. Вернем вашей мебели заводской вид за 2 часа.
+                </p>
+                
+                <div class="hero-btns flex flex-wrap gap-4">
+                    <button class="bg-brandYellow text-slate-900 px-10 py-5 rounded-2xl font-black text-lg shadow-yellow hover:scale-105 active:scale-95 transition pulse-yellow flex items-center justify-center">
+                        <i class="fas fa-magic mr-3"></i> <span data-i18n="btn_order_now">ЗАКАЗАТЬ ЧИСТКУ</span>
+                    </button>
+                    <a href="https://instagram.com" target="_blank" class="bg-brandBlue text-white px-10 py-5 rounded-2xl font-black text-lg flex items-center justify-center hover:bg-blue-700 transition border-b-4 border-brandYellow shadow-lg">
+                        <i class="fab fa-instagram mr-3"></i> <span data-i18n="hero_insta">INSTAGRAM</span>
+                    </a>
+                </div>
+
+                <div class="mt-16 flex items-center space-x-8">
+                    <div class="flex -space-x-4">
+                        <img src="https://i.pravatar.cc/100?u=1" class="w-14 h-14 rounded-full border-4 border-white dark:border-darkBg shadow-xl">
+                        <img src="https://i.pravatar.cc/100?u=2" class="w-14 h-14 rounded-full border-4 border-white dark:border-darkBg shadow-xl">
+                        <div class="w-14 h-14 rounded-full bg-brandYellow border-4 border-white dark:border-darkBg shadow-xl flex items-center justify-center text-slate-900 font-black text-xs">+500</div>
+                    </div>
+                    <p class="text-sm font-black opacity-60 uppercase tracking-tighter" data-i18n="hero_reviews">Более 5000 довольных <br> клиентов в Ташкенте</p>
+                </div>
+            </div>
+
+            <div class="relative" data-aos="zoom-in">
+                <div class="relative z-10 rounded-[3rem] overflow-hidden border-8 border-white dark:border-slate-800 shadow-2xl rotate-2">
+                    <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80" alt="Soclean" class="w-full h-full object-cover">
+                </div>
+                <div class="absolute -bottom-6 -right-6 bg-brandYellow p-6 rounded-3xl shadow-2xl z-20 flex items-center space-x-4 -rotate-3 border-4 border-white dark:border-darkBg">
+                    <div class="text-4xl text-slate-900 font-black italic tracking-tighter">100%</div>
+                    <div class="text-[10px] font-black text-slate-800 uppercase leading-none" data-i18n="hero_guarantee">Гарантия <br> результата</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="py-24 px-6 bg-white dark:bg-slate-900/30">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <div class="order-2 lg:order-1 grid grid-cols-2 gap-4" data-aos="fade-right">
+                    <div class="space-y-4">
+                        <div class="h-64 rounded-3xl overflow-hidden border-4 border-brandYellow"><img src="https://images.unsplash.com/photo-1628177142898-93e36e4e3a50?auto=format&fit=crop&q=80" class="h-full w-full object-cover"></div>
+                        <div class="h-40 bg-brandYellow rounded-3xl flex items-center justify-center p-6 text-center shadow-yellow">
+                            <span class="text-slate-900 font-black italic text-xl uppercase tracking-tighter" data-i18n="about_badge">Чистим как для себя</span>
+                        </div>
+                    </div>
+                    <div class="space-y-4 pt-12">
+                        <div class="h-40 bg-brandBlue rounded-3xl flex items-center justify-center p-6 text-center text-white border-b-4 border-brandYellow">
+                             <span class="font-black italic text-xl uppercase tracking-tighter">Premium Service</span>
+                        </div>
+                        <div class="h-64 rounded-3xl overflow-hidden border-4 border-slate-100 dark:border-slate-700"><img src="https://images.unsplash.com/photo-1550966841-3ee2cb0b1f7d?auto=format&fit=crop&q=80" class="h-full w-full object-cover"></div>
+                    </div>
+                </div>
+                
+                <div class="order-1 lg:order-2" data-aos="fade-left">
+                    <h2 class="text-brandBlue dark:text-brandYellow font-black uppercase tracking-widest text-sm mb-4" data-i18n="about_sub">О компании Soclean</h2>
+                    <h3 class="text-4xl md:text-6xl font-black mb-8 leading-tight italic" data-i18n="about_title">Мы создаем уют в <span class="text-brandBlue dark:text-brandYellow underline decoration-brandYellow">вашем доме</span></h3>
+                    <p class="text-lg opacity-70 mb-10 leading-relaxed border-l-4 border-brandYellow pl-6" data-i18n="about_desc">
+                        Soclean — это команда профессионалов, вооруженных немецким оборудованием Karcher и биоразлагаемыми средствами. Мы не просто чистим, мы дезинфицируем.
+                    </p>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div class="p-6 bg-slate-50 dark:bg-darkCard rounded-2xl border-l-4 border-brandYellow hover:bg-brandYellow/10 transition group">
+                            <i class="fas fa-leaf text-brandYellow text-2xl mb-4 group-hover:scale-125 transition"></i>
+                            <h4 class="font-black mb-2 uppercase text-sm" data-i18n="adv1">Эко-средства</h4>
+                            <p class="text-xs opacity-60" data-i18n="adv1_d">Безопасно для детей и аллергиков</p>
+                        </div>
+                        <div class="p-6 bg-slate-50 dark:bg-darkCard rounded-2xl border-l-4 border-brandYellow hover:bg-brandYellow/10 transition group">
+                            <i class="fas fa-shield-alt text-brandYellow text-2xl mb-4 group-hover:scale-125 transition"></i>
+                            <h4 class="font-black mb-2 uppercase text-sm" data-i18n="adv2">Гарантия</h4>
+                            <p class="text-xs opacity-60" data-i18n="adv2_d">Результат или вернем деньги</p>
+                        </div>
+                        <div class="p-6 bg-slate-50 dark:bg-darkCard rounded-2xl border-l-4 border-brandYellow hover:bg-brandYellow/10 transition group">
+                            <i class="fas fa-history text-brandYellow text-2xl mb-4 group-hover:scale-125 transition"></i>
+                            <h4 class="font-black mb-2 uppercase text-sm" data-i18n="adv3">5 лет опыта</h4>
+                            <p class="text-xs opacity-60" data-i18n="adv3_d">Знаем все типы тканей</p>
+                        </div>
+                        <div class="p-6 bg-slate-50 dark:bg-darkCard rounded-2xl border-l-4 border-brandYellow hover:bg-brandYellow/10 transition group">
+                            <i class="fas fa-clock text-brandYellow text-2xl mb-4 group-hover:scale-125 transition"></i>
+                            <h4 class="font-black mb-2 uppercase text-sm" data-i18n="adv4">Экспресс-сушка</h4>
+                            <p class="text-xs opacity-60" data-i18n="adv4_d">Мебель сухая за 1 час</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="services" class="py-24 px-6 overflow-hidden">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h3 class="text-4xl md:text-7xl font-black mb-6 italic" data-i18n="serv_title">ЧТО МЫ <span class="text-brandBlue dark:text-brandYellow underline decoration-brandYellow">ЧИСТИМ?</span></h3>
+                <p class="text-lg opacity-60 uppercase tracking-widest font-black" data-i18n="serv_sub">Цены прозрачны как слеза</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="group bg-white dark:bg-darkCard rounded-[3rem] p-8 shadow-xl border-2 border-slate-100 dark:border-slate-800 hover:border-brandYellow transition-all duration-500 relative overflow-hidden" data-aos="fade-up">
+                    <div class="absolute -top-12 -right-12 w-32 h-32 bg-brandYellow/10 rounded-full group-hover:scale-[3] transition duration-700"></div>
+                    
+                    <div class="w-20 h-20 bg-brandBlue text-brandYellow rounded-3xl flex items-center justify-center text-3xl mb-8 border-b-4 border-brandYellow group-hover:rotate-12 transition">
+                        <i class="fas fa-couch"></i>
+                    </div>
+                    <h4 class="text-2xl font-black mb-4 italic uppercase" data-i18n="s1_t">Диваны</h4>
+                    <p class="opacity-60 mb-8 leading-relaxed" data-i18n="s1_d">Глубокое очищение ворса, удаление пятен чая, кофе и вина.</p>
+                    <div class="flex items-center justify-between border-t-2 border-slate-50 dark:border-slate-800 pt-6">
+                        <div>
+                            <span class="text-xs opacity-40 uppercase font-black">от</span>
+                            <span class="text-2xl font-black text-brandBlue dark:text-brandYellow">150.000</span>
+                        </div>
+                        <button class="bg-brandYellow text-slate-900 w-12 h-12 rounded-full flex items-center justify-center shadow-yellow hover:scale-110 transition active:rotate-90">
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="group bg-white dark:bg-darkCard rounded-[3rem] p-8 shadow-xl border-2 border-slate-100 dark:border-slate-800 hover:border-brandYellow transition-all duration-500 relative overflow-hidden" data-aos="fade-up" data-aos-delay="100">
+                    <div class="absolute -top-12 -right-12 w-32 h-32 bg-brandYellow/10 rounded-full group-hover:scale-[3] transition duration-700"></div>
+                    <div class="w-20 h-20 bg-brandBlue text-brandYellow rounded-3xl flex items-center justify-center text-3xl mb-8 border-b-4 border-brandYellow group-hover:rotate-12 transition">
+                        <i class="fas fa-car"></i>
+                    </div>
+                    <h4 class="text-2xl font-black mb-4 italic uppercase" data-i18n="s2_t">Авто</h4>
+                    <p class="opacity-60 mb-8 leading-relaxed" data-i18n="s2_d">Полная химчистка салона: сиденья, пол, потолок и пластик.</p>
+                    <div class="flex items-center justify-between border-t-2 border-slate-50 dark:border-slate-800 pt-6">
+                        <div>
+                            <span class="text-xs opacity-40 uppercase font-black">от</span>
+                            <span class="text-2xl font-black text-brandBlue dark:text-brandYellow">400.000</span>
+                        </div>
+                        <button class="bg-brandYellow text-slate-900 w-12 h-12 rounded-full flex items-center justify-center shadow-yellow hover:scale-110 transition">
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="group bg-white dark:bg-darkCard rounded-[3rem] p-8 shadow-xl border-2 border-slate-100 dark:border-slate-800 hover:border-brandYellow transition-all duration-500 relative overflow-hidden" data-aos="fade-up" data-aos-delay="200">
+                    <div class="absolute -top-12 -right-12 w-32 h-32 bg-brandYellow/10 rounded-full group-hover:scale-[3] transition duration-700"></div>
+                    <div class="w-20 h-20 bg-brandBlue text-brandYellow rounded-3xl flex items-center justify-center text-3xl mb-8 border-b-4 border-brandYellow group-hover:rotate-12 transition">
+                        <i class="fas fa-bed"></i>
+                    </div>
+                    <h4 class="text-2xl font-black mb-4 italic uppercase" data-i18n="s3_t">Матрасы</h4>
+                    <p class="opacity-60 mb-8 leading-relaxed" data-i18n="s3_d">Удаление пылевых клещей и аллергенов. Чистота для здорового сна.</p>
+                    <div class="flex items-center justify-between border-t-2 border-slate-50 dark:border-slate-800 pt-6">
+                        <div>
+                            <span class="text-xs opacity-40 uppercase font-black">от</span>
+                            <span class="text-2xl font-black text-brandBlue dark:text-brandYellow">100.000</span>
+                        </div>
+                        <button class="bg-brandYellow text-slate-900 w-12 h-12 rounded-full flex items-center justify-center shadow-yellow hover:scale-110 transition">
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-20 bg-brandYellow rounded-[3rem] p-10 flex flex-col md:flex-row items-center justify-between shadow-yellow border-4 border-white dark:border-darkBg group overflow-hidden relative" data-aos="zoom-in">
+                <div class="absolute -top-20 -left-20 w-64 h-64 bg-white/20 rounded-full blur-3xl group-hover:translate-x-full duration-[2000ms] transition"></div>
+                
+                <div class="relative z-10 text-center md:text-left mb-8 md:mb-0">
+                    <h5 class="text-2xl md:text-4xl font-black text-slate-900 mb-2 italic" data-i18n="insta_t">ХОТИТЕ БОЛЬШЕ ФОТО?</h5>
+                    <p class="text-slate-800 font-bold opacity-70 uppercase tracking-widest text-sm" data-i18n="insta_d">Наше портфолио в режиме LIVE</p>
+                </div>
+                <a href="https://instagram.com" target="_blank" class="relative z-10 bg-slate-900 text-white px-10 py-5 rounded-2xl font-black text-xl hover:bg-brandBlue transition shadow-2xl flex items-center">
+                    <i class="fab fa-instagram mr-3 text-2xl"></i> <span data-i18n="insta_btn">ПЕРЕЙТИ В INSTAGRAM</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="steps" class="py-24 px-6 bg-slate-100 dark:bg-slate-900/50 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-20" data-aos="fade-up">
+                <h3 class="text-4xl md:text-7xl font-black mb-4 uppercase italic tracking-tighter" data-i18n="steps_t">МАГИЯ ЧИСТОТЫ</h3>
+                <p class="text-brandBlue dark:text-brandYellow font-black uppercase tracking-widest" data-i18n="steps_s">В 6 ПРОСТЫХ ШАГОВ</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-12 relative">
+                <div class="relative group" data-aos="fade-up">
+                    <div class="text-[120px] font-black text-brandYellow/10 absolute -top-16 -left-4 group-hover:text-brandYellow/20 transition leading-none">01</div>
+                    <div class="relative z-10">
+                        <div class="w-16 h-16 bg-brandBlue text-brandYellow rounded-2xl flex items-center justify-center text-2xl font-black mb-6 border-b-4 border-brandYellow">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <h5 class="text-2xl font-black mb-4 uppercase italic" data-i18n="st1_t">ЗАЯВКА</h5>
+                        <p class="opacity-60 leading-relaxed" data-i18n="st1_d">Оставляете заявку на сайте или в Telegram. Мы отвечаем за 60 секунд.</p>
+                    </div>
+                </div>
+                <div class="relative group" data-aos="fade-up" data-aos-delay="100">
+                    <div class="text-[120px] font-black text-brandYellow/10 absolute -top-16 -left-4 group-hover:text-brandYellow/20 transition leading-none">02</div>
+                    <div class="relative z-10">
+                        <div class="w-16 h-16 bg-brandBlue text-brandYellow rounded-2xl flex items-center justify-center text-2xl font-black mb-6 border-b-4 border-brandYellow">
+                            <i class="fas fa-camera"></i>
+                        </div>
+                        <h5 class="text-2xl font-black mb-4 uppercase italic" data-i18n="st2_t">ФОТО-АНАЛИЗ</h5>
+                        <p class="opacity-60 leading-relaxed" data-i18n="st2_d">Присылаете фото мебели — мы называем точную фиксированную цену.</p>
+                    </div>
+                </div>
+                <div class="relative group" data-aos="fade-up" data-aos-delay="200">
+                    <div class="text-[120px] font-black text-brandYellow/10 absolute -top-16 -left-4 group-hover:text-brandYellow/20 transition leading-none">03</div>
+                    <div class="relative z-10">
+                        <div class="w-16 h-16 bg-brandBlue text-brandYellow rounded-2xl flex items-center justify-center text-2xl font-black mb-6 border-b-4 border-brandYellow">
+                            <i class="fas fa-car-side"></i>
+                        </div>
+                        <h5 class="text-2xl font-black mb-4 uppercase italic" data-i18n="st3_t">ВЫЕЗД</h5>
+                        <p class="opacity-60 leading-relaxed" data-i18n="st3_d">Мастер со всем оборудованием приезжает в удобное время.</p>
+                    </div>
+                </div>
+                </div>
+        </div>
+    </section>
+
+    <section class="py-24 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+                <div data-aos="fade-right">
+                    <h3 class="text-4xl md:text-6xl font-black mb-4 italic uppercase tracking-tighter" data-i18n="rev_t">О НАС ГОВОРЯТ</h3>
+                    <p class="text-brandBlue dark:text-brandYellow font-black uppercase tracking-widest text-sm" data-i18n="rev_s">Честные отзывы в Ташкенте</p>
+                </div>
+                <div class="flex space-x-4">
+                    <button id="prev" class="w-14 h-14 rounded-full border-2 border-brandYellow flex items-center justify-center text-brandYellow hover:bg-brandYellow hover:text-slate-900 transition shadow-lg"><i class="fas fa-chevron-left"></i></button>
+                    <button id="next" class="w-14 h-14 rounded-full border-2 border-brandYellow flex items-center justify-center text-brandYellow hover:bg-brandYellow hover:text-slate-900 transition shadow-lg"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+
+            <div class="overflow-hidden">
+                <div class="slide-track" id="track">
+                    <div class="min-w-full md:min-w-[50%] lg:min-w-[33.33%] px-4">
+                        <div class="bg-white dark:bg-darkCard p-10 rounded-[3rem] border-b-8 border-brandYellow shadow-xl h-full">
+                            <div class="flex text-brandYellow mb-6">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                            </div>
+                            <p class="italic opacity-80 mb-10 leading-relaxed" data-i18n="r1_t">"Диван стал как новый! Все пятна от детского питания исчезли. Очень вежливый мастер."</p>
+                            <div class="flex items-center space-x-4">
+                                <div class="w-12 h-12 bg-brandYellow rounded-full flex items-center justify-center font-black">M</div>
+                                <div>
+                                    <h6 class="font-black italic uppercase text-xs">Малика А.</h6>
+                                    <p class="text-[10px] opacity-40 uppercase">Ташкент</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="faq" class="py-24 px-6 bg-white dark:bg-slate-900/30">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h3 class="text-4xl md:text-6xl font-black mb-4 uppercase italic" data-i18n="faq_t">ЕСТЬ ВОПРОСЫ?</h3>
+                <div class="w-24 h-2 bg-brandYellow mx-auto rounded-full"></div>
+            </div>
+
+            <div class="space-y-4">
+                <div class="bg-slate-50 dark:bg-darkCard rounded-3xl overflow-hidden border-2 border-transparent hover:border-brandYellow transition-all duration-300">
+                    <button class="faq-toggle w-full px-8 py-6 text-left flex justify-between items-center group">
+                        <span class="text-lg font-black italic uppercase tracking-tighter" data-i18n="q1">Сколько длится чистка?</span>
+                        <div class="w-10 h-10 bg-brandYellow rounded-full flex items-center justify-center text-slate-900 transition-transform duration-300 icon-rot">
+                            <i class="fas fa-plus text-xs"></i>
+                        </div>
+                    </button>
+                    <div class="faq-content hidden px-8 pb-8 opacity-60 leading-relaxed border-t border-slate-100 dark:border-slate-800 pt-4" data-i18n="a1">
+                        В среднем химчистка стандартного дивана занимает от 1.5 до 2.5 часов в зависимости от сложности загрязнений.
+                    </div>
+                </div>
+                </div>
+        </div>
+    </section>
+
+    <section class="py-24 px-6 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto bg-brandBlue rounded-[4rem] p-12 md:p-24 text-center relative z-10 shadow-2xl border-b-8 border-brandYellow shadow-yellow overflow-hidden">
+            <div class="absolute -top-24 -left-24 w-64 h-64 bg-brandYellow/10 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-24 -right-24 w-64 h-64 bg-brandYellow/10 rounded-full blur-3xl"></div>
+
+            <h3 class="text-4xl md:text-7xl font-black text-white mb-10 italic leading-tight" data-aos="fade-up" data-i18n="cta_t">ВЕРНЕМ ЧИСТОТУ В <br> ВАШ ДОМ <span class="text-brandYellow underline underline-offset-8 decoration-8">СЕГОДНЯ</span></h3>
+            <p class="text-xl text-white/80 mb-12 max-w-2xl mx-auto font-bold uppercase tracking-widest" data-aos="fade-up" data-aos-delay="100" data-i18n="cta_d">Оставьте заявку и получите экспресс-сушку в подарок!</p>
+            
+            <div class="flex flex-col sm:flex-row justify-center gap-6" data-aos="zoom-in">
+                <a href="tel:+998901234567" class="bg-brandYellow text-slate-900 px-12 py-6 rounded-2xl font-black text-2xl shadow-2xl hover:scale-105 transition flex items-center justify-center">
+                    <i class="fas fa-phone-alt mr-4"></i> +998 90 123 45 67
+                </a>
+                <a href="#" class="bg-white/10 backdrop-blur-md text-white border-2 border-brandYellow px-12 py-6 rounded-2xl font-black text-2xl hover:bg-white hover:text-brandBlue transition">
+                    TELEGRAM
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-slate-900 text-white pt-24 pb-12 px-6 border-t-8 border-brandYellow">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
+            <div>
+                <div class="flex items-center space-x-3 mb-8">
+                    <div class="w-12 h-12 bg-brandBlue rounded-full flex items-center justify-center border-2 border-brandYellow font-black text-2xl italic">S</div>
+                    <span class="text-3xl font-black italic tracking-tighter">SOCLEAN</span>
+                </div>
+                <p class="opacity-40 text-sm leading-relaxed mb-8 font-bold" data-i18n="f_desc">Профессиональная химчистка в Ташкенте. Мы работаем, чтобы вы отдыхали в чистоте.</p>
+                <div class="flex space-x-4">
+                    <a href="#" class="w-12 h-12 bg-slate-800 rounded-xl flex items-center justify-center hover:bg-brandYellow hover:text-slate-900 transition"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="w-12 h-12 bg-slate-800 rounded-xl flex items-center justify-center hover:bg-brandYellow hover:text-slate-900 transition"><i class="fab fa-telegram"></i></a>
+                </div>
+            </div>
+
+            <div>
+                <h6 class="text-xl font-black mb-8 italic uppercase tracking-tighter text-brandYellow" data-i18n="f_nav">Навигация</h6>
+                <ul class="space-y-4 opacity-50 font-bold uppercase text-xs tracking-widest">
+                    <li><a href="#about" class="hover:text-brandYellow transition">О компании</a></li>
+                    <li><a href="#services" class="hover:text-brandYellow transition">Услуги</a></li>
+                    <li><a href="#steps" class="hover:text-brandYellow transition">Процесс</a></li>
+                    <li><a href="#faq" class="hover:text-brandYellow transition">Вопросы</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h6 class="text-xl font-black mb-8 italic uppercase tracking-tighter text-brandYellow" data-i18n="f_serv">Услуги</h6>
+                <ul class="space-y-4 opacity-50 font-bold uppercase text-xs tracking-widest">
+                    <li>Химчистка диванов</li>
+                    <li>Чистка матрасов</li>
+                    <li>Химчистка авто</li>
+                    <li>Чистка ковров</li>
+                </ul>
+            </div>
+
+            <div>
+                <h6 class="text-xl font-black mb-8 italic uppercase tracking-tighter text-brandYellow" data-i18n="f_cont">Контакты</h6>
+                <p class="mb-4 font-black italic">+998 90 123 45 67</p>
+                <p class="mb-4 opacity-40 font-bold">Ташкент, ул. Навои, 1</p>
+                <a href="https://instagram.com" class="inline-flex items-center bg-brandYellow/10 text-brandYellow p-3 rounded-xl border border-brandYellow/20 hover:bg-brandYellow hover:text-slate-900 transition duration-500">
+                    <i class="fab fa-instagram mr-2"></i> @soclean_uz
+                </a>
+            </div>
+        </div>
+        <div class="text-center pt-12 border-t border-white/5 opacity-20 text-[10px] font-black tracking-[5px] uppercase">
+            &copy; 2026 SOCLEAN UZBEKISTAN. ALL RIGHTS RESERVED.
+        </div>
+    </footer>
+
+    <div class="fixed bottom-6 right-6 z-[2000] flex flex-col space-y-4 items-end">
+        <a href="#" class="w-14 h-14 bg-sky-500 text-white rounded-full shadow-xl flex items-center justify-center text-2xl hover:scale-110 active:scale-95 transition pulse-blue"><i class="fab fa-telegram-plane"></i></a>
+        <a href="#" class="w-14 h-14 bg-pink-600 text-white rounded-full shadow-xl flex items-center justify-center text-2xl hover:scale-110 active:scale-95 transition"><i class="fab fa-instagram"></i></a>
+        <a href="tel:+998901234567" class="w-16 h-16 bg-brandYellow text-slate-900 rounded-full shadow-yellow flex items-center justify-center text-3xl hover:scale-110 active:scale-95 transition pulse-yellow"><i class="fas fa-phone-alt"></i></a>
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 1000, once: true });
+
+        // МУЛЬТИЯЗЫЧНОСТЬ
+        const translations = {
+            ru: {
+                nav_about: "О нас", nav_services: "Услуги", nav_steps: "Процесс", nav_faq: "FAQ", btn_order: "Заказать",
+                hero_badge: "Мы работаем в Ташкенте", hero_t1: "ЧИСТОТА", hero_t2: "БЕЗ ПЯТЕН", hero_desc: "Профессиональная глубокая химчистка мебели, матрасов и авто. Вернем вашей мебели заводской вид за 2 часа.",
+                btn_order_now: "ЗАКАЗАТЬ ЧИСТКУ", hero_insta: "INSTAGRAM", hero_reviews: "Более 5000 довольных клиентов в Ташкенте", hero_guarantee: "Гарантия результата",
+                about_sub: "О компании Soclean", about_title: "Мы создаем уют в вашем доме", about_desc: "Soclean — это команда профессионалов, вооруженных немецким оборудованием Karcher.",
+                serv_title: "ЧТО МЫ ЧИСТИМ?", s1_t: "Диваны", s1_d: "Глубокое очищение ворса, удаление пятен чая и кофе.",
+                insta_t: "ХОТИТЕ БОЛЬШЕ ФОТО?", insta_btn: "ПЕРЕЙТИ В INSTAGRAM", cta_t: "ВЕРНЕМ ЧИСТОТУ СЕГОДНЯ"
+            },
+            uz: {
+                nav_about: "Biz haqimizda", nav_services: "Xizmatlar", nav_steps: "Jarayon", nav_faq: "FAQ", btn_order: "Buyurtma",
+                hero_badge: "Toshkentda ishlaymiz", hero_t1: "MUKAMMAL", hero_t2: "TOZALIK", hero_desc: "Mebel, matras va avtomobillarni professional chuqur kimyoviy tozalash. 2 soat ichida zavod ko'rinishini qaytaramiz.",
+                btn_order_now: "XIZMATGA YOZILISH", hero_insta: "INSTAGRAM", hero_reviews: "Toshkentda 5000 dan ortiq mamnun mijozlar", hero_guarantee: "Natijaga kafolat",
+                about_sub: "Soclean kompaniyasi haqida", about_title: "Uyingizda shinamlik yaratamiz", about_desc: "Soclean — bu Karcher uskunalariga ega professional jamoa.",
+                serv_title: "NIMALARNI TOZALAYMIZ?", s1_t: "Divanlar", s1_d: "Vorsni chuqur tozalash, choy va kofe dog'larini ketkazish.",
+                insta_t: "KO'PROQ FOTO KERAKMI?", insta_btn: "INSTAGRAMGA O'TISH", cta_t: "TOZALIKNI BUGUN QAYTARAMIZ"
+            }
+        };
+
+        function changeLang(lang) {
+            localStorage.setItem('lang', lang);
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                el.innerText = translations[lang][key] || el.innerText;
+            });
+            updateLangUI(lang);
+        }
+
+        function updateLangUI(lang) {
+            ['ru', 'uz'].forEach(l => {
+                const btn = document.getElementById(`lang-${l}`);
+                if(l === lang) {
+                    btn.classList.add('bg-brandYellow', 'text-slate-900', 'shadow-lg');
+                    btn.classList.remove('text-slate-500');
+                } else {
+                    btn.classList.remove('bg-brandYellow', 'text-slate-900', 'shadow-lg');
+                    btn.classList.add('text-slate-500');
+                }
+            });
+        }
+
+        // Запуск языка
+        changeLang(localStorage.getItem('lang') || 'ru');
+
+        // ТЕМНАЯ ТЕМА
+        const darkBtn = document.getElementById('dark-mode-toggle');
+        darkBtn.onclick = () => {
+            document.documentElement.classList.toggle('dark');
+            localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+        }
+        if(localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark');
+
+        // МОБИЛЬНОЕ МЕНЮ
+        const burger = document.getElementById('burger-btn');
+        const close = document.getElementById('close-menu');
+        const overlay = document.getElementById('menu-overlay');
+        const body = document.body;
+
+        function toggleMenu(show) {
+            if(show) {
+                body.classList.add('menu-open');
+                document.getElementById('b-line1').classList.add('rotate-45', 'translate-y-2');
+                document.getElementById('b-line2').classList.add('opacity-0');
+                document.getElementById('b-line3').classList.add('-rotate-45', '-translate-y-2', 'w-6');
+            } else {
+                body.classList.remove('menu-open');
+                document.getElementById('b-line1').classList.remove('rotate-45', 'translate-y-2');
+                document.getElementById('b-line2').classList.remove('opacity-0');
+                document.getElementById('b-line3').classList.remove('-rotate-45', '-translate-y-2', 'w-6');
+            }
+        }
+        burger.onclick = () => toggleMenu(true);
+        close.onclick = () => toggleMenu(false);
+        overlay.onclick = () => toggleMenu(false);
+        document.querySelectorAll('.mobile-link').forEach(link => link.onclick = () => toggleMenu(false));
+
+        // HEADER SCROLL
+        window.onscroll = () => {
+            const h = document.getElementById('header');
+            if(window.scrollY > 50) h.classList.add('py-2', 'bg-white/10');
+            else h.classList.remove('py-2', 'bg-white/10');
+        }
+
+        // FAQ ACCORDION
+        document.querySelectorAll('.faq-toggle').forEach(toggle => {
+            toggle.onclick = () => {
+                const content = toggle.nextElementSibling;
+                const icon = toggle.querySelector('.icon-rot');
+                content.classList.toggle('hidden');
+                icon.classList.toggle('rotate-45');
+            }
+        });
+
+        // SLIDER
+        const track = document.getElementById('track');
+        let index = 0;
+        document.getElementById('next').onclick = () => {
+            index = (index + 1) % 3;
+            track.style.transform = `translateX(-${index * 100}%)`;
+        }
+        document.getElementById('prev').onclick = () => {
+            index = index === 0 ? 2 : index - 1;
+            track.style.transform = `translateX(-${index * 100}%)`;
+        }
+    </script>
+</body>
+</html>
